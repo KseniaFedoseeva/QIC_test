@@ -1,0 +1,6 @@
+# Default ignored files
+/shelf/
+/workspace.xml
+.iml
+.idea
+git remote add origin https://github.com/KseniaFedoseeva/QIC_test.git
