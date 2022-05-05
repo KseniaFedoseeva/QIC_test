@@ -7,9 +7,14 @@ import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.chrome.ChromeDriver;
+import org.openqa.selenium.interactions.Actions;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
 
+import javax.swing.*;
+import java.awt.event.ActionEvent;
+import java.beans.PropertyChangeListener;
+import java.util.List;
 import java.util.concurrent.TimeUnit;
 
 public class CarTest {
@@ -20,10 +25,11 @@ public class CarTest {
     public void befor() {
         System.setProperty("webdriver.chrome.driver", "src/test/resources/chromedriver.exe");
         driver = new ChromeDriver();
-        driver.manage().timeouts().implicitlyWait(30, TimeUnit.SECONDS);
-        driver.manage().timeouts().pageLoadTimeout(10, TimeUnit.SECONDS);
+        driver.manage().timeouts().pageLoadTimeout(50, TimeUnit.SECONDS);
+        driver.manage().timeouts().implicitlyWait(50, TimeUnit.SECONDS);
         driver.manage().window().maximize();
-        wait = new WebDriverWait(driver, 10, 1000);
+        WebDriverWait wait = new WebDriverWait(driver, 40, 2000);
+     //   wait = new WebDriverWait(driver, 10, 1000);
 
     }
 
@@ -31,17 +37,22 @@ public class CarTest {
     public void test() {
 
         driver.navigate().to("https://lp.qic-insured.com/en");
-        WebDriverWait wait = new WebDriverWait(driver, 30, 2000);
+
 
         //Переход в car
 
         WebElement itemCar = driver.findElement(By.xpath("//div[@class = 'offerMain__insurance-item car']"));
+        try {
+            Thread.sleep(2000);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
         itemCar.click();
 
         //Выбор бренда
 
         WebElement itemBrand = driver.findElement(By.xpath("//p[text() = 'Toyota']"));
-        wait.until(ExpectedConditions.elementToBeClickable(By.xpath("//*[@id=\"landForm\"]/div/div[1]/div[1]"))); // проверка
+//        wait.until(ExpectedConditions.elementToBeClickable(By.xpath("//p[text() = 'Toyota']"))); // проверка
         itemBrand.click();
 
         //Выбор модели
@@ -56,6 +67,11 @@ public class CarTest {
         }
         //Выбор года
         String year = "//div[@chip=2012]";
+        try {
+            Thread.sleep(2000);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
         WebElement itemYear = driver.findElement(By.xpath(year));
         itemYear.click();
 
@@ -82,30 +98,89 @@ public class CarTest {
         setValue("5555555555555555D");
         clickProceed();
 
+        try {
+            Thread.sleep(5000);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
         setValue("23333333333");
         clickProceed();
 
-        WebElement firstName = driver.findElement(By.xpath("//label[text()='First Name']"));
-        firstName.click();
-        firstName.sendKeys("Anna");
+        WebElement firstName = driver.findElement(By.xpath("//label[text() = 'First Name']"));
 
-        WebElement familyName = driver.findElement(By.xpath("//label[text()='Family Name']"));
-        familyName.click();
-        familyName.sendKeys("Smith");
+        Actions action = new Actions (driver);
+        action.moveToElement(firstName);
+        action.click(firstName);
+        action.sendKeys(firstName, "Anna").perform();
+
+        WebElement familyName = driver.findElement(By.xpath("//label[text() = 'Family Name']"));
+      //  Actions action1 = new Actions (driver);
+        action.moveToElement(familyName);
+        action.click(familyName);
+        action.sendKeys(familyName, "Anna").perform();
+
         clickProceed();
 
 
+      // Страница дня рождения
         WebElement titlePage = driver.findElement(By.xpath("//h1[@class='boxForm_heading']"));
-        Assert.assertTrue("Страница не загрузилась", titlePage.isDisplayed() && titlePage.getText().contains("Date of Birth"));
+        try {
+            Thread.sleep(5000);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+      //  Assert.assertEquals("Страница не загрузилась", " Date of Birth ", titlePage.getText().contentEquals(" Date of Birth "));
         clickProceed();
+
+        // Страница даты полиса
+        try {
+            Thread.sleep(5000);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+        clickProceed();
+
+        //Контакты
+
+        WebElement contacts = driver.findElement(By.xpath("/html/body/section/section[1]/div/div[3]/div[2]/div/form/div[1]/div[1]/div/div[2]"));
+        action.moveToElement(contacts).click(contacts);
+        action.sendKeys(contacts, "1520 1122").perform();
+
+        WebElement email = driver.findElement(By.xpath("/html/body/section/section[1]/div/div[3]/div[2]/div/form/div[1]/div[2]/input"));
+        action.moveToElement(email).click(email);
+        action.sendKeys(email, "15201122@bk.ru").perform();
+
+        clickProceed();
+
+        //Выбор плана
+
+        WebElement select = driver.findElement(By.xpath("/html/body/section/section[1]/div/div[2]/div[2]/div/div[2]/div[2]/div/div[2]/a"));
+
+        select.click();
+
+        //Указываем стоимость авто
+        setValue("250000");
+        clickProceed();
+
+
 
 
     }
     public void setValue(String value){
+        try {
+            Thread.sleep(2000);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
         String fieldXPath = "//input[@type='text']";
         WebElement element = driver.findElement(By.xpath(fieldXPath));
         element.click();
         element.sendKeys(value);
+        try {
+            Thread.sleep(2000);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
     }
 
     public void clickProceed(){
