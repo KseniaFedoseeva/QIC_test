@@ -1,5 +1,6 @@
 package com.test.qic;
 
+import org.junit.After;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
@@ -29,7 +30,7 @@ public class CarTest {
         driver.manage().timeouts().implicitlyWait(50, TimeUnit.SECONDS);
         driver.manage().window().maximize();
         WebDriverWait wait = new WebDriverWait(driver, 40, 2000);
-     //   wait = new WebDriverWait(driver, 10, 1000);
+
 
     }
 
@@ -129,7 +130,7 @@ public class CarTest {
         } catch (InterruptedException e) {
             e.printStackTrace();
         }
-      //  Assert.assertEquals("Страница не загрузилась", " Date of Birth ", titlePage.getText().contentEquals(" Date of Birth "));
+
         clickProceed();
 
         // Страница даты полиса
@@ -152,20 +153,33 @@ public class CarTest {
 
         clickProceed();
 
-        //Выбор плана
+        //Выбор плана Заголовок //h1[text() = ' Select Insurance Type ']
 
         WebElement select = driver.findElement(By.xpath("/html/body/section/section[1]/div/div[2]/div[2]/div/div[2]/div[2]/div/div[2]/a"));
-
+        WebElement selectTitle = driver.findElement(By.xpath("//h1[text() = ' Select Insurance Type ']"));
+        Assert.assertTrue("Страница не загрузилась", selectTitle.isDisplayed());
         select.click();
 
-        //Указываем стоимость авто
+        //Указываем стоимость авто Подзаголовок //p[text() = 'The average market price, including depreciation']
+
+        WebElement valueCar = driver.findElement(By.xpath("p[text() = 'The average market price, including depreciation']"));
+        Assert.assertTrue("Страница не загрузилась", valueCar.isDisplayed());
         setValue("250000");
         clickProceed();
 
+        // Quote page
 
-
+        WebElement checkout = driver.findElement(By.xpath("//button[text() = ' Checkout ']"));
+        Assert.assertTrue("Страница не загрузилась", checkout.isDisplayed());
+       // checkout.click();
 
     }
+
+    @After
+    public void after() {
+        driver.quit();
+    }
+
     public void setValue(String value){
         try {
             Thread.sleep(2000);
