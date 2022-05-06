@@ -115,7 +115,6 @@ public class CarTest {
         action.sendKeys(firstName, "Anna").perform();
 
         WebElement familyName = driver.findElement(By.xpath("//label[text() = 'Family Name']"));
-      //  Actions action1 = new Actions (driver);
         action.moveToElement(familyName);
         action.click(familyName);
         action.sendKeys(familyName, "Anna").perform();
@@ -157,21 +156,85 @@ public class CarTest {
 
         WebElement select = driver.findElement(By.xpath("/html/body/section/section[1]/div/div[2]/div[2]/div/div[2]/div[2]/div/div[2]/a"));
         WebElement selectTitle = driver.findElement(By.xpath("//h1[text() = ' Select Insurance Type ']"));
+        Assert.assertTrue("Страница не загрузилась", select.isDisplayed());
         Assert.assertTrue("Страница не загрузилась", selectTitle.isDisplayed());
         select.click();
 
         //Указываем стоимость авто Подзаголовок //p[text() = 'The average market price, including depreciation']
 
-        WebElement valueCar = driver.findElement(By.xpath("p[text() = 'The average market price, including depreciation']"));
-        Assert.assertTrue("Страница не загрузилась", valueCar.isDisplayed());
-        setValue("250000");
+      //  WebElement valueCar = driver.findElement(By.xpath("p[text() = 'The average market price, including depreciation']"));
+      //  Assert.assertTrue("Страница не загрузилась", valueCar.isDisplayed());
+        WebElement priceCar = driver.findElement(By.xpath("//input[@type='text']"));
+        action.moveToElement(priceCar);
+        action.click(priceCar);
+        action.sendKeys(priceCar, "250000").perform();
+
         clickProceed();
 
         // Quote page
-
+        try {
+            Thread.sleep(5000);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
         WebElement checkout = driver.findElement(By.xpath("//button[text() = ' Checkout ']"));
         Assert.assertTrue("Страница не загрузилась", checkout.isDisplayed());
-       // checkout.click();
+        WebElement creditCard = driver.findElement(By.xpath("//label[text()='Credit Card']"));
+        creditCard.click();
+        checkout.click();
+
+        // Заполнение форм оплаты
+
+        try {
+            Thread.sleep(5000);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+
+        WebElement clickNext = driver.findElement(By.xpath("//input[@type='submit']"));
+        clickNext.click();
+        WebElement cardVisa = driver.findElement(By.xpath("//label[@for='card_type_001']"));
+        cardVisa.click();
+
+        // Card number
+
+        WebElement cardNumber = driver.findElement(By.xpath("//input[@name='card_number']"));
+        action.moveToElement(cardNumber);
+        action.click(cardNumber);
+        action.sendKeys(cardNumber, "4111111111111111").perform();
+
+        WebElement exMonth = driver.findElement(By.xpath("//select[@name='card_expiry_month']"));
+        exMonth.click();
+        WebElement numMonth = driver.findElement(By.xpath("//option[@value='01']"));
+        numMonth.click();
+        WebElement exYear = driver.findElement(By.xpath("//select[@name='card_expiry_year']"));
+        exYear.click();
+        WebElement numYear = driver.findElement(By.xpath("//option[@value='2029']"));
+        numYear.click();
+
+        //CVC
+
+        WebElement carCVC = driver.findElement(By.xpath("//input[@name = 'card_cvn']"));
+        action.moveToElement(carCVC);
+        action.click(carCVC);
+        action.sendKeys(carCVC, "000").perform();
+
+        //Review your Order
+
+        WebElement reviewOrder = driver.findElement(By.xpath("//h2[text() = 'Review your Order']"));
+        Assert.assertTrue("Страница не загрузилась", reviewOrder.isDisplayed());
+        clickNext.click();
+
+        // Download policy page
+
+        try {
+            Thread.sleep(5000);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+        WebElement downloadPolicy = driver.findElement(By.xpath("//a[@class = 'btn btnInsSuc']"));
+        Assert.assertTrue("Страница не загрузилась", downloadPolicy.isDisplayed());
+
 
     }
 
